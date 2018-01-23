@@ -1,8 +1,8 @@
 ---
 
-- hosts: leaf1a
+- hosts: leafs
   connection: local
-  gather_facts: no 
+  gather_facts: yes
   vars_files:
   - "vars/all.yaml"
 
@@ -11,6 +11,7 @@
     eos_config:
       src: templates/bgp_leaf.j2
       provider: "{{ eos_connection }}"
+    ignore_errors: True
 
   - name: Connectivity checker
     eos_command:
@@ -18,5 +19,7 @@
         - ping {{ item }}
       provider: '{{ eos_connection }}'
     register: result
-    failed_when: "'Destination Host Unreachable' not in result.stdout"
-    with_items: "{{ ebgp_peers[inventory_hostname].keys() }}"    
+    with_items: "{{ ebgp_peers[inventory_hostname].keys() }}"
+
+  - name: Check the pings from point to point links
+    debug: var=result
