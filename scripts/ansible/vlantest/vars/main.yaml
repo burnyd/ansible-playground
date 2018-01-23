@@ -1,0 +1,12 @@
+---
+eos_connection:
+  host: "{{ inventory_hostname }}"
+  username: vagrant
+  password: vagrant
+  transport: cli
+  use_ssl: false
+vlans:
+    - vlanid: 7
+      name: production
+    - vlanid: 8
+      name: app
