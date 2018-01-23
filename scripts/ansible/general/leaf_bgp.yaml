@@ -1,6 +1,6 @@
 ---
 
-- hosts: leafs
+- hosts: leaf1a
   connection: local
   gather_facts: no 
   vars_files:
@@ -18,5 +18,5 @@
         - ping {{ item }}
       provider: '{{ eos_connection }}'
     register: result
-    failed_when: "'connect: Network is unreachable' in result.stdout"
+    failed_when: "'Destination Host Unreachable' not in result.stdout"
     with_items: "{{ ebgp_peers[inventory_hostname].keys() }}"    
